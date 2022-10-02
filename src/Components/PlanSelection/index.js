@@ -1,77 +1,81 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles.css";
+import useApi, { isAuthenticated } from "../../hooks/useApi";
+import StripeCardForm from "../CheckoutForm";
+
 function PlanSelection() {
-  const [check, setCheck] = useState(false);
+  const [check, setCheck] = useState("monthly");
+  const userAuthenticated = isAuthenticated();
+  const [data, setData] = useState([]);
+  const [priceId, setPriceId] = useState("")
+  const [paymentBody, showPaymentBody] = useState(false);
+  const api = useApi();
+
+  useEffect(() => {
+    // if (data.length != 0) return;
+    api
+      .get("subs/plans")
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, [check]);
+
+  if (!userAuthenticated) {
+    window.location.href = "/sign-up";
+  }
+  // else if (data.length == 0) return null
+  if (paymentBody) {
+    return (
+      <div className="auth-inner">
+        <StripeCardForm priceId={priceId} />
+      </div>
+    );
+  }
   return (
     <div className="container">
       <div className="top">
-        <h1>Plans & Pricing</h1>
-        <div className="toggle-btn">
-          <span style={{ margin: "0.8rem" }}>Annually</span>
+        <h1 style={{ color: "#ffffff" }}>Plans & Pricing</h1>
+        {/* <div className="toggle-btn">
+          <span style={{ margin: "0.8rem", color: "#ffffff" }}>Annually</span>
           <label className="switch">
             <input
               type="checkbox"
               id="checbox"
-              onClick={() => setCheck(!check)}
+              onClick={() => {
+                if (check == "monthly")
+                  setCheck("yearly")
+                else setCheck("monthly")
+              }}
             />
             <span className="slider round"></span>
           </label>
-          <span style={{ margin: "0.8rem" }}>Monthly</span>
-        </div>
+          <span style={{ margin: "0.8rem", color: "#ffffff" }}>Monthly</span>
+        </div> */}
       </div>
 
       <div className="package-container">
-        <div className="packages">
-          <h1>Basic</h1>
-          {check ? (
-            <h2 className="text1"> $9.99</h2>
-          ) : (
-            <h2 className="text2">$119.99</h2>
+        {data.length !== 0 &&
+          data.map((item) => 
+            <div className="packages" key={item.id}>
+              <h1>{item.plan_name}</h1>
+              <h2 className="text1"> ₹{item.price}</h2>
+              <ul className="list">
+                <li className="first">{item.video_quality} Video Quality</li>
+                <li>{item.resolution} Resolution</li>
+                <li>{item.devices_str}</li>
+                <li>{item.screens} Screens</li>
+              </ul>
+              <div className="button" onClick={() => {
+                setPriceId(item.price_id)
+                showPaymentBody(true)
+              }}>
+                Next
+              </div>
+            </div>
           )}
-          <ul className="list">
-            <li className="first">2000 Subscribers</li>
-            <li>12,000 Emails/month</li>
-            <li>Multi-User Accounts</li>
-            <li>Email Support</li>
-          </ul>
-          <a href="#" className="button button1">
-            Start Now
-          </a>
-        </div>
-        <div className="packages">
-          <h1>Professional</h1>
-          {check ? (
-            <h2 className="text1">$19.99</h2>
-          ) : (
-            <h2 className="text2">$239.99</h2>
-          )}
-          <ul className="list">
-            <li className="first">Basic +</li>
-            <li>Landing Pages</li>
-            <li>Pop-up Forms</li>
-            <li>Premium Support</li>
-          </ul>
-          <a href="#" className="button button2">
-            Start Now
-          </a>
-        </div>
-        <div className="packages">
-          <h1>Master</h1>
-          {check ? (
-            <h2 className="text1">$29.99</h2>
-          ) : (
-            <h2 className="text2">$359.99</h2>
-          )}
-          <ul className="list">
-            <li className="first">Professional +</li>
-            <li>Marketing Automation</li>
-            <li>Instagram Ads</li>
-            <li>Facebook Ads</li>
-          </ul>
-          <a href="#" className="button button3">
-            Start Now
-          </a>
-        </div>
       </div>
     </div>
   );

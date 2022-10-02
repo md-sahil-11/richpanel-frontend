@@ -3,7 +3,7 @@
   box-sizing: border-box;
 }
 body {
-  background: #1C8EF9 !important;
+  background: #20539c !important;
   min-height: 100vh;
   display: flex;
   font-weight: 400;
@@ -60,3 +60,4 @@ body, html, .App, #root, .auth-wrapper {
 .login-redirect a {
   color: #167bff;
 }
+

@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
-import useApi from "../../hooks/useApi";
+import useApi, { isAuthenticated } from "../../hooks/useApi";
 import { setTokenLocal } from "../../utils/localStorage";
 function Login() {
   const [userData, setuserData] = useState({
@@ -10,7 +10,7 @@ function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const url = ""
+    const url = "users/account/login"
     const res = await api.post(url, userData);
     if (res.data.success) {
       setTokenLocal(res.data.data.token);
@@ -23,6 +23,12 @@ function Login() {
       ...userData,
       [e.target.name]: val,
     });
+  }
+
+  const userAuthenticated = isAuthenticated()
+
+  if (userAuthenticated) {
+    window.location.href = '/plans'
   }
   return (
     <div className="auth-inner">

@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import useApi, { isAuthenticated } from "../../hooks/useApi"
+import { setTokenLocal } from "../../utils/localStorage"
+
 function SignUp() {
   const [userData, setuserData] = useState({
     email: "",
@@ -7,14 +10,16 @@ function SignUp() {
   });
   const api = useApi();
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    const url = ""
+    const url = "users/account/register"
+    console.log("here")
+
     // change url
-    const res = await api.post(url, userData);
-    if (res.data.success) {
+    api.post(url, userData)
+    .then(res => {
       setTokenLocal(res.data.data.token);
-    }
+    }).catch(err => console.log(err.message))
   }
 
   function handleChange(e) {
@@ -23,6 +28,12 @@ function SignUp() {
       ...userData,
       [e.target.name]: val,
     });
+  }
+
+  const userAuthenticated = isAuthenticated()
+
+  if (userAuthenticated) {
+    window.location.href = '/plans'
   }
   return (
     <div className="auth-inner">
@@ -61,6 +72,7 @@ function SignUp() {
             placeholder="Enter password"
           />
         </div>
+        <br />
         <div className="d-grid">
           <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
             Sign Up

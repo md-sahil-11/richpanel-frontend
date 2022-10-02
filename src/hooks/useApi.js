@@ -1,6 +1,6 @@
 import axios from "axios";
 export default function useApi() {
-  const baseURL = "http://localhost/4000";
+  const baseURL = "http://localhost:8000/";
 
   const instance = axios.create({
     baseURL: baseURL,
@@ -14,4 +14,9 @@ export default function useApi() {
   });
 
   return instance
+}
+
+export function isAuthenticated () {
+  if (localStorage.getItem("access_token")) return true
+  return false
 }
