@@ -1,6 +1,6 @@
 import axios from "axios";
 export default function useApi() {
-  const baseURL = "http://localhost:8000/";
+  const baseURL = "https://sahil11.pythonanywhere.com/";
 
   const instance = axios.create({
     baseURL: baseURL,

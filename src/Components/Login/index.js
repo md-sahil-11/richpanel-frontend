@@ -14,6 +14,7 @@ function Login() {
     const res = await api.post(url, userData);
     if (res.data.success) {
       setTokenLocal(res.data.data.token);
+      window.location.href = '/plans'
     }
   }
 
