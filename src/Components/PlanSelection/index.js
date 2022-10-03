@@ -62,7 +62,7 @@ function PlanSelection() {
           data.map((item) => 
             <div className="packages" key={item.id}>
               <h1>{item.plan_name}</h1>
-              <h2 className="text1"> ₹{item.price}</h2>
+              <h2 className="text1"> ₹{item.price} / {item.membership}</h2>
               <ul className="list">
                 <li className="first">{item.video_quality} Video Quality</li>
                 <li>{item.resolution} Resolution</li>
