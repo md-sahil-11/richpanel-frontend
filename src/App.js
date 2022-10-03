@@ -6,13 +6,18 @@ import Login from "./Components/Login";
 import SignUp from "./Components/Signup";
 import PlanSelection from "./Components/PlanSelection";
 import MySubscription from "./Components/MySubscription";
+import { isAuthenticated } from "./hooks/useApi";
 function App() {
+  const userAuthenticated = isAuthenticated()
   return (
     <Router>
       <div className="App">
         <br />
-        <a style={{color: '#fff', padding: "10px"}} href="/my-subscription">My Subs</a>
-        <a style={{color: '#fff', padding: "10px"}} href="/plans">Plans</a>
+        {userAuthenticated && <>
+            <a style={{color: '#fff', padding: "10px"}} href="/my-subscription">My Subs</a>
+            <a style={{color: '#fff', padding: "10px"}} href="/plans">Plans</a>
+          </>
+        }
         <div className="auth-wrapper">
           <Routes>
               <Route exact path="/" element={<Login />} />

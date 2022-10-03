@@ -19,6 +19,7 @@ function SignUp() {
     api.post(url, userData)
     .then(res => {
       setTokenLocal(res.data.data.token);
+      window.location.href = '/plans'
     }).catch(err => console.log(err.message))
   }
 

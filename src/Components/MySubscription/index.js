@@ -4,12 +4,14 @@ import "./style.css";
 
 export default function MySubscription() {
   const [item, setItem] = useState([]);
+  const [loading, setLoading] = useState(true)
   const api = useApi();
 
   useEffect(() => {
     api.get("subs/history").then((res) => {
       console.log(res.data)
       setItem(res.data.pop());
+      setLoading(false)
     });
   }, []);
 
@@ -19,6 +21,7 @@ export default function MySubscription() {
     })
   }
 
+  if (loading) return <h4>Loading...</h4>
   return (
     <div className="container">
       <div className="top">
@@ -26,7 +29,7 @@ export default function MySubscription() {
       </div>
 
       <div className="package-container">
-        {item.length !== 0 && (
+        {item?.length !== 0 && (
           <div className="packages">
             <h1>{item.plan.plan_name}</h1>
             <h2 className="text1"> ₹{item.plan.price}</h2>
