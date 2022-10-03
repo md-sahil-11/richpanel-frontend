@@ -9,6 +9,7 @@ function PlanSelection() {
   const [data, setData] = useState([]);
   const [priceId, setPriceId] = useState("")
   const [paymentBody, showPaymentBody] = useState(false);
+  const [loading, setLoading] = useState(false);
   const api = useApi();
 
   useEffect(() => {

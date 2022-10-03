@@ -36,6 +36,7 @@ function CardSection() {
   );
 }
 function CheckoutForm({ priceId }) {
+  const [loading, setLoading] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
   const api = useApi()
@@ -52,6 +53,7 @@ function CheckoutForm({ priceId }) {
     if (error) {
       console.log(error)
     } else {
+      setLoading(true)
       api.post('subs/plans/subscribe', { price_id: priceId, payment_method_id: paymentMethod.id })
         .then((response) => {
           console.log(response.data);
@@ -62,9 +64,11 @@ function CheckoutForm({ priceId }) {
         });
     }
   };
-
+  
+  if (loading) return <h4>Loading...</h4>
   return (
     <form onSubmit={handleSubmit}>
+      
       <CardSection />
       <br />
       <button
